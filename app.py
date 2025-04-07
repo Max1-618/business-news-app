@@ -47,7 +47,7 @@ def fetch_les_echos_news():
     options.add_argument("--disable-dev-shm-usage")
     chromedriver_path = os.environ.get("CHROMEDRIVER_PATH")
     service = Service(executable_path=chromedriver_path)
-    driver = webdriver.Chrome(service=service, options=options))
+    driver = webdriver.Chrome(service=service, options=options)
     driver.get("https://www.lesechos.fr/finance-marches")
     news = []
     headlines = driver.find_elements(By.TAG_NAME, "h3")
