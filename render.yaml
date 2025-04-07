@@ -3,8 +3,9 @@ services:
     name: business-news-app
     env: python
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn app:app"  # This should be enough to start the Flask app
+    startCommand: "python -m waitress.server app:app"
     envVars:
-      - key: FLASK_ENV
-        value: production  # It's good to set Flask to production mode
+      - key: FLASK_APP
+        value: "app.py"
+
 
