@@ -76,13 +76,27 @@ def fetch_les_echos_news():
     driver.quit()
     return news
 
-@app.route('/', methods=["GET", "HEAD"])
+@app.route('/')
 def home():
-    bbc_news = fetch_bbc_news()
-    les_echos_news = fetch_les_echos_news()
-    all_news = bbc_news + les_echos_news
-    all_news.sort(key=lambda x: x["timestamp"], reverse=True)
-    return render_template('index.html', all_news=all_news)
+    try:
+        print("Fetching news...")
+        # Fetching data
+        bbc_news = fetch_bbc_news()
+        print(f"BBC News fetched: {len(bbc_news)} articles")
+        les_echos_news = fetch_les_echos_news()
+        print(f"Les Echos News fetched: {len(les_echos_news)} articles")
+        
+        all_news = bbc_news + les_echos_news
+        # Sort by timestamp descending
+        all_news.sort(key=lambda x: x["timestamp"], reverse=True)
+        
+        print(f"Total news articles: {len(all_news)}")
+
+        return render_template('index.html', all_news=all_news)
+    except Exception as e:
+        logging.error(f"Error occurred: {e}")
+        logging.error(traceback.format_exc())
+        return "An error occurred while fetching the news", 500
 
 if __name__ == "__main__":
     app.run(debug=True)
