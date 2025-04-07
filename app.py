@@ -1,13 +1,32 @@
+import logging
 from flask import Flask, render_template
 import requests
 from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
 from datetime import datetime
+import traceback
 
 app = Flask(__name__)
+
+# Set up logging
+logging.basicConfig(level=logging.DEBUG)
+
+@app.route('/')
+def home():
+    try:
+        # Fetching data
+        bbc_news = fetch_bbc_news()
+        les_echos_news = fetch_les_echos_news()
+        all_news = bbc_news + les_echos_news
+        # Sort by timestamp descending
+        all_news.sort(key=lambda x: x["timestamp"], reverse=True)
+
+        return render_template('index.html', all_news=all_news)
+    except Exception as e:
+        logging.error(f"Error occurred: {e}")
+        logging.error(traceback.format_exc())
+        return "An error occurred while fetching the news", 500
+
+# Your fetch_bbc_news and fetch_les_echos_news functions remain the same
 
 def fetch_bbc_news():
     URL = "https://www.bbc.com/news/business"
