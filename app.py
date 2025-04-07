@@ -1,9 +1,14 @@
-import logging
 from flask import Flask, render_template
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+import time
+import logging
+import traceback
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-import traceback
 
 app = Flask(__name__)
 
