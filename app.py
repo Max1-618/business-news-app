@@ -54,7 +54,7 @@ def fetch_les_echos_news():
     driver.quit()
     return news
 
-@app.route('/')
+@app.route('/', methods=["GET", "HEAD"])
 def home():
     bbc_news = fetch_bbc_news()
     les_echos_news = fetch_les_echos_news()
