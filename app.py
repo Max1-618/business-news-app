@@ -39,7 +39,7 @@ def fetch_bbc_news():
 def fetch_les_echos_news():
     options = Options()
     options.headless = True
-    options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    options.binary_location = os.environ.get("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe")  # double backslashes or raw string")
     options.add_argument("--no-sandbox")
     options.add_argument("user-agent=Mozilla/5.0")
     options.add_argument("--disable-blink-features=AutomationControlled")
@@ -47,7 +47,7 @@ def fetch_les_echos_news():
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
     os.environ["GOOGLE_CHROME_BIN"] = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-    chromedriver_path = os.environ.get("C:\Program Files\Google\Chrome\CHROME DRIVER")
+    chromedriver_path = os.environ.get("C:\Program Files\Google\Chrome\CHROME DRIVER\chromedriver-win64\chromedriver.exe")
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.get("https://www.lesechos.fr/finance-marches")
