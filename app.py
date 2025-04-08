@@ -38,7 +38,6 @@ def fetch_bbc_news():
 
 def fetch_les_echos_news():
     options = Options()
-    options = webdriver.ChromeOptions()
     options.headless = True
     options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     options.add_argument("--no-sandbox")
