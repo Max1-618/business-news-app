@@ -42,7 +42,6 @@ def fetch_les_echos_news():
     # Create Chrome options
     options = Options()
     options.headless = True  # Headless mode enabled
-    options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")  # Path to Chrome binary
     options.add_argument("--no-sandbox")
     options.add_argument("user-agent=Mozilla/5.0")
     options.add_argument("--disable-blink-features=AutomationControlled")
@@ -102,21 +101,6 @@ def fetch_les_echos_news():
 
         # Return empty list in case of failure
         return []
-
-# Function to repeat scraping every 30 minutes (1800 seconds)
-def repeat_scraping():
-    while True:
-        # Call your scraping function
-        print("Scraping news...")
-        news = fetch_les_echos_news()
-        print("Fetched news:", news)
-
-        # Wait for 30 minutes (1800 seconds) before running the scraping again
-        time.sleep(1800)  # 1800 seconds = 30 minutes
-
-# Start the loop for scraping
-if __name__ == "__main__":
-    repeat_scraping()
     
 
 @app.route('/')
