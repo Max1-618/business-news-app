@@ -4,7 +4,8 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
-import time
+from datetime import datetime
+import tempfile
 import os
 import logging
 import traceback
@@ -60,28 +61,57 @@ def fetch_les_echos_news():
     options.add_argument(f"--user-data-dir={user_data_dir}")
     
     # Initialize WebDriver with the service and options
-    try:
+     try:
+        # Initialize WebDriver with options and service
         driver = webdriver.Chrome(service=service, options=options)
+        
+        # Open the URL
+        driver.get("https://www.lesechos.fr/finance-marches")
+        
+        # Initialize list to store news data
+        news = []
+        
+        # Find all headline elements on the page
+        headlines = driver.find_elements(By.TAG_NAME, "h3")
+        
+        # Loop through all the headlines
+        for headline in headlines:
+            title = headline.text.strip()  # Get the title of the headline
+            
+            try:
+                # Try to find the parent link for each headline
+                parent_link = headline.find_element(By.XPATH, "..").get_attribute("href")
+                
+                # If the link is valid and matches the domain, append the news data
+                if parent_link and parent_link.startswith("https://www.lesechos.fr"):
+                    news.append({
+                        "title": title,
+                        "url": parent_link,
+                        "source": "lesechos",
+                        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    })
+            except Exception as e:
+                # Handle any errors with a message
+                print(f"An error occurred while processing the headline: {e}")
+                continue  # Skip this headline and continue with the next one
+        
+        # Quit the driver after processing
+        driver.quit()
+
+        # Return the scraped news
+        return news
+
+    except Exception as e:
+        # If WebDriver initialization or page load fails
+        print(f"An error occurred while initializing the WebDriver: {e}")
+        
+        if 'driver' in locals():  # Check if driver was created before quitting
+            driver.quit()
+
+        # Return empty list in case of failure
+        return []
+
     
-    driver.get("https://www.lesechos.fr/finance-marches")
-    
-    news = []
-    headlines = driver.find_elements(By.TAG_NAME, "h3")
-    for headline in headlines:
-        title = headline.text.strip()
-        try:
-            parent_link = headline.find_element(By.XPATH, "..").get_attribute("href")
-            if parent_link and parent_link.startswith("https://www.lesechos.fr"):
-                news.append({
-                    "title": title,
-                    "url": parent_link,
-                    "source": "lesechos",
-                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                })
-        except:
-            continue
-    driver.quit()
-    return news
 
 @app.route('/')
 def home():
