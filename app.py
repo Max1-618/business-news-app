@@ -46,9 +46,10 @@ def fetch_les_echos_news():
     options.add_argument("--headless")
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
-    chromedriver_path = os.environ.get("CHROMEDRIVER_PATH")
+    os.environ["GOOGLE_CHROME_BIN"] = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+    chromedriver_path = os.environ.get("C:\Program Files\Google\Chrome\CHROME DRIVER")
     service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=options)
+   driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.get("https://www.lesechos.fr/finance-marches")
     news = []
     headlines = driver.find_elements(By.TAG_NAME, "h3")
