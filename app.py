@@ -49,7 +49,7 @@ def fetch_les_echos_news():
     os.environ["GOOGLE_CHROME_BIN"] = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
     chromedriver_path = os.environ.get("C:\Program Files\Google\Chrome\CHROME DRIVER")
     service = Service(ChromeDriverManager().install())
-   driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.get("https://www.lesechos.fr/finance-marches")
     news = []
     headlines = driver.find_elements(By.TAG_NAME, "h3")
