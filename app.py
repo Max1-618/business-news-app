@@ -38,18 +38,17 @@ def fetch_bbc_news():
 
 def fetch_les_echos_news():
     options = Options()
+    options = webdriver.ChromeOptions()
     options.headless = True
-    options.binary_location = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+    options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     options.add_argument("--no-sandbox")
     options.add_argument("user-agent=Mozilla/5.0")
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--headless")
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
-    os.environ["GOOGLE_CHROME_BIN"] = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-    chromedriver_path = os.environ.get("C:\Program Files\Google\Chrome\CHROME DRIVER\chromedriver-win64\chromedriver.exe")
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    service = Service(os.environ.get("CHROMEDRIVER_PATH"))
+    driver = webdriver.Chrome(service=service, options=options)
     driver.get("https://www.lesechos.fr/finance-marches")
     news = []
     headlines = driver.find_elements(By.TAG_NAME, "h3")
