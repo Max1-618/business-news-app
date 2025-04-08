@@ -37,9 +37,15 @@ def fetch_bbc_news():
     return headlines_data
 
 def fetch_les_echos_news():
+    # Create Chrome options
     options = Options()
     options.headless = True  # Headless mode enabled
     options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")  # Path to Chrome binary
+    
+    if not options.binary_location:
+        raise EnvironmentError("Chrome binary path not found. Please set 'GOOGLE_CHROME_BIN' environment variable.")
+    
+    # Chrome options to prevent any Chrome-specific issues
     options.add_argument("--no-sandbox")
     options.add_argument("user-agent=Mozilla/5.0")
     options.add_argument("--disable-blink-features=AutomationControlled")
@@ -49,8 +55,13 @@ def fetch_les_echos_news():
     # Specify the path to ChromeDriver using Service
     service = Service(ChromeDriverManager().install())
     
+    # Create a unique user data directory for each session
+    user_data_dir = tempfile.mkdtemp()  # This creates a unique temporary directory
+    options.add_argument(f"--user-data-dir={user_data_dir}")
+    
     # Initialize WebDriver with the service and options
-    driver = webdriver.Chrome(service=service, options=options)
+    try:
+        driver = webdriver.Chrome(service=service, options=options)
     
     driver.get("https://www.lesechos.fr/finance-marches")
     
