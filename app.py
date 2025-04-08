@@ -39,7 +39,7 @@ def fetch_bbc_news():
 def fetch_les_echos_news():
     options = Options()
     options.headless = True
-    options.binary_location = os.environ.get("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe")  # double backslashes or raw string")
+    options.binary_location = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
     options.add_argument("--no-sandbox")
     options.add_argument("user-agent=Mozilla/5.0")
     options.add_argument("--disable-blink-features=AutomationControlled")
