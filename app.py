@@ -42,46 +42,37 @@ def fetch_les_echos_news():
     options = Options()
     options.headless = True  # Headless mode enabled
     options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")  # Path to Chrome binary
-    
-    if not options.binary_location:
-        raise EnvironmentError("Chrome binary path not found. Please set 'GOOGLE_CHROME_BIN' environment variable.")
-    
-    # Chrome options to prevent any Chrome-specific issues
     options.add_argument("--no-sandbox")
     options.add_argument("user-agent=Mozilla/5.0")
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
-    
-    # Specify the path to ChromeDriver using Service
+
+    # Setup ChromeDriver service
     service = Service(ChromeDriverManager().install())
-    
-    # Create a unique user data directory for each session
-    user_data_dir = tempfile.mkdtemp()  # This creates a unique temporary directory
-    options.add_argument(f"--user-data-dir={user_data_dir}")
-    
-    # Initialize WebDriver with the service and options
-     try:
+
+    # Initialize the WebDriver and fetch the news
+    try:
         # Initialize WebDriver with options and service
         driver = webdriver.Chrome(service=service, options=options)
-        
+
         # Open the URL
         driver.get("https://www.lesechos.fr/finance-marches")
-        
+
         # Initialize list to store news data
         news = []
-        
+
         # Find all headline elements on the page
         headlines = driver.find_elements(By.TAG_NAME, "h3")
-        
+
         # Loop through all the headlines
         for headline in headlines:
             title = headline.text.strip()  # Get the title of the headline
-            
+
             try:
                 # Try to find the parent link for each headline
                 parent_link = headline.find_element(By.XPATH, "..").get_attribute("href")
-                
+
                 # If the link is valid and matches the domain, append the news data
                 if parent_link and parent_link.startswith("https://www.lesechos.fr"):
                     news.append({
@@ -94,7 +85,7 @@ def fetch_les_echos_news():
                 # Handle any errors with a message
                 print(f"An error occurred while processing the headline: {e}")
                 continue  # Skip this headline and continue with the next one
-        
+
         # Quit the driver after processing
         driver.quit()
 
@@ -104,13 +95,12 @@ def fetch_les_echos_news():
     except Exception as e:
         # If WebDriver initialization or page load fails
         print(f"An error occurred while initializing the WebDriver: {e}")
-        
+
         if 'driver' in locals():  # Check if driver was created before quitting
             driver.quit()
 
         # Return empty list in case of failure
         return []
-
     
 
 @app.route('/')
