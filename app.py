@@ -47,7 +47,7 @@ def fetch_les_echos_news():
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
     chromedriver_path = os.environ.get("CHROMEDRIVER_PATH")
-    service = Service(executable_path=chromedriver_path)
+    service = Service(ChromeDriverManager().install()
     driver = webdriver.Chrome(service=service, options=options)
     driver.get("https://www.lesechos.fr/finance-marches")
     news = []
