@@ -72,7 +72,7 @@ def fetch_bbc_news():
 def home():
     bbc_news = fetch_bbc_news()
     #les_echos_news = fetch_les_echos_news()
-    #all_news = bbc_news + les_echos_news
+    all_news = bbc_news
     # Sort by timestamp descending
     all_news.sort(key=lambda x: x["timestamp"], reverse=True)
     return render_template('index.html', all_news=all_news)
