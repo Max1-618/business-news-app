@@ -38,41 +38,41 @@ def fetch_bbc_news():
     
     return headlines_data
 
-def fetch_les_echos_news():
-    options = webdriver.ChromeOptions()
-    options.add_argument("user-agent=Mozilla/5.0")
-    options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_argument("--headless")
-    options.add_argument("--disable-gpu")
+#def fetch_les_echos_news():
+    #options = webdriver.ChromeOptions()
+    #options.add_argument("user-agent=Mozilla/5.0")
+    #options.add_argument("--disable-blink-features=AutomationControlled")
+    #options.add_argument("--headless")
+    #options.add_argument("--disable-gpu")
 
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-    driver.get("https://www.lesechos.fr/finance-marches")
+    #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    #driver.get("https://www.lesechos.fr/finance-marches")
 
-    news = []
-    headlines = driver.find_elements(By.TAG_NAME, "h3")
+    #news = []
+    #headlines = driver.find_elements(By.TAG_NAME, "h3")
 
-    for headline in headlines:
-        title = headline.text.strip()
-        try:
-            parent_link = headline.find_element(By.XPATH, "..").get_attribute("href")
-            if parent_link and parent_link.startswith("https://www.lesechos.fr"):
-                news.append({
-                    "title": title,
-                    "url": parent_link,
-                    "source": "lesechos",
-                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                })
-        except Exception as e:
-            print(f"Error while fetching link for headline: {title}, error: {e}")
+    #for headline in headlines:
+        #title = headline.text.strip()
+        #try:
+            #parent_link = headline.find_element(By.XPATH, "..").get_attribute("href")
+            #if parent_link and parent_link.startswith("https://www.lesechos.fr"):
+                #news.append({
+                    #"title": title,
+                    #"url": parent_link,
+                    #"source": "lesechos",
+                    #"timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                #})
+        #except Exception as e:
+            #print(f"Error while fetching link for headline: {title}, error: {e}")
 
-    driver.quit()
-    return news
+    #driver.quit()
+    #return news
 
 @app.route('/')
 def home():
     bbc_news = fetch_bbc_news()
-    les_echos_news = fetch_les_echos_news()
-    all_news = bbc_news + les_echos_news
+    #les_echos_news = fetch_les_echos_news()
+    #all_news = bbc_news + les_echos_news
     # Sort by timestamp descending
     all_news.sort(key=lambda x: x["timestamp"], reverse=True)
     return render_template('index.html', all_news=all_news)
