@@ -20,7 +20,7 @@ def fetch_bbc_news():
     soup = BeautifulSoup(response.text, "html.parser")
     
     headlines_data = []
-    for h2_tag in soup.find_all("h2", class_=["sc-87075214-3", "eywmDE", "czAFqs", "hxmZpj"]):
+    for h2_tag in soup.find_all("h2", class_=["sc-87075214-3", "eywmDE", "czAFqs", "hxmZpj", "sc-9d830f2a-3", "jqQlce", "fWzToZ"]):
         headline_text = h2_tag.get_text(strip=True)
         link_tag = h2_tag.find_parent("a")
         
